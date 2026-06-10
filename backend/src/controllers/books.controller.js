@@ -1,4 +1,4 @@
-import { addBookService, getAllBooksService } from "../services/books.service"
+import { addBookService, getAllBooksService } from "../services/books.service.js"
 
 
 export const getAllBooksController = async (req, res) => {
@@ -15,5 +15,5 @@ export const addBookController = async (req, res) => {
     const result = await addBookService({name, author, ISBN, price, quantity});
 
     res.status(201).json({msg: "New book added"});
-    
+
 }

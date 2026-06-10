@@ -1,5 +1,6 @@
 import express from "express";
-import { addBookController, getAllBooksController } from "../controllers/books.controller";
+import { addBookController, getAllBooksController } from "../controllers/books.controller.js";
+
 const router = express.Router();
 
 
@@ -10,3 +11,5 @@ router.get("/", getAllBooksController);
 // Add a book
 
 router.post("/", addBookController);
+
+export {router as booksRouter}

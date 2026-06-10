@@ -1,6 +1,8 @@
 import express from "express";
 import { connectDB } from "./db/index.js";
 import cors from "cors";
+import { booksRouter } from "./routes/books.route.js";
+import { authRouter } from "./routes/auth.route.js";
 
 const app = express();
 
@@ -13,6 +15,9 @@ connectDB();
 // Routes
 
 
+app.use("/books", booksRouter);
+
+app.use("/auth", authRouter);
 
 
 app.listen(3000, () => {
