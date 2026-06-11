@@ -4,7 +4,7 @@ import { comparePassword, hashPassword } from "../utils/password.js";
 
 export const registerService = async ({email, password, phoneNumber, role}) => {
 
-    try{
+    
         const user = await User.findOne({email});
 
     if(user){
@@ -14,28 +14,29 @@ export const registerService = async ({email, password, phoneNumber, role}) => {
     }
 
     const hashedPassword = await hashPassword(password);
+   
 
-    const newUser = new User({email, hashedPassword, phoneNumber, role});
+    const newUser = new User({email, password: hashedPassword, phoneNumber, role});
     await newUser.save();
 
     return {msg: "Done"};
-    }
-    catch(err){
-        console.log(err);
-    }
+    
+    
 
 }
 
 export const loginService = async({email, password}) => {
 
-    try{
-        const user = await User.find({email});
+
+
+        const user = await User.findOne({email});
 
     if(!user){
         const error = new Error("Username or Password is incorrect");
         error.statusCode = 401;
         throw error;
     }
+    console.log("user:::", user);
 
     const isCorrect = await comparePassword(password, user.password);
 
@@ -47,11 +48,9 @@ export const loginService = async({email, password}) => {
 
     const token = signToken({id: user._id});
     return token;
-    }
+    
 
-    catch(err){
-        console.log(err);
-    }
+
 
 
 }

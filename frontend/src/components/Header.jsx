@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 function SearchIcon({ className = "" }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={className}>
@@ -38,6 +41,14 @@ function ChevronDownIcon({ className = "" }) {
 }
 
 export default function Header() {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <header className="flex h-[54px] items-center justify-between rounded-[10px] bg-white px-5 shadow-[0_8px_30px_rgba(16,24,40,0.06)]">
       <div>
@@ -62,13 +73,29 @@ export default function Header() {
 
         <div className="h-8 w-px bg-slate-200" />
 
-        <button className="flex items-center gap-2 rounded-full px-1 py-0.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f08a24] text-[14px] font-semibold text-white">
-            A
-          </div>
+        <div className="relative">
+          <button
+            onClick={() => setShowDropdown((prev) => !prev)}
+            className="flex items-center gap-2 rounded-full px-1 py-0.5"
+          >
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f08a24] text-[14px] font-semibold text-white">
+              A
+            </div>
 
-          <ChevronDownIcon className="h-4 w-4 text-slate-500" />
-        </button>
+            <ChevronDownIcon className="h-4 w-4 text-slate-500" />
+          </button>
+
+          {showDropdown && (
+            <div className="absolute right-0 top-11 z-50 w-36 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg">
+              <button
+                onClick={handleLogout}
+                className="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50"
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

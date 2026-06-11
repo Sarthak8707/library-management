@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 function EyeIcon({ className = "" }) {
   return (
     <svg
@@ -20,58 +23,28 @@ function EyeIcon({ className = "" }) {
   );
 }
 
-const books = [
-  {
-    id: "10234",
-    name: "The Alchemist",
-    author: "Paulo Coelho",
-    isbn: "9780061122415",
-    price: 399,
-    quantity: 25,
-  },
-  {
-    id: "20489",
-    name: "Atomic Habits",
-    author: "James Clear",
-    isbn: "9780735211292",
-    price: 499,
-    quantity: 40,
-  },
-  {
-    id: "30956",
-    name: "Sapiens",
-    author: "Yuval Noah Harari",
-    isbn: "9780099590088",
-    price: 699,
-    quantity: 18,
-  },
-  {
-    id: "45127",
-    name: "The Psychology of Money",
-    author: "Morgan Housel",
-    isbn: "9780857197689",
-    price: 450,
-    quantity: 30,
-  },
-  {
-    id: "58903",
-    name: "Ikigai",
-    author: "Francesc Miralles",
-    isbn: "9781786330895",
-    price: 350,
-    quantity: 22,
-  },
-  {
-    id: "67421",
-    name: "Think Like a Monk",
-    author: "Jay Shetty",
-    isbn: "9780008386597",
-    price: 550,
-    quantity: 15,
-  },
-];
-
 export default function BooksList() {
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/books"
+        );
+
+        setBooks(response.data);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, []);
+
   return (
     <section className="rounded-[12px] bg-white px-5 pb-6 pt-4 shadow-[0_10px_30px_rgba(16,24,40,0.04)]">
       <h1 className="text-[29px] font-semibold tracking-[-0.04em] text-slate-700">
@@ -115,44 +88,64 @@ export default function BooksList() {
           </thead>
 
           <tbody>
-            {books.map((book) => (
-              <tr
-                key={book.id}
-                className="border-t border-slate-200 bg-white"
-              >
-                <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
-                  {book.id}
-                </td>
-
-                <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
-                  {book.name}
-                </td>
-
-                <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
-                  {book.author}
-                </td>
-
-                <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
-                  {book.isbn}
-                </td>
-
-                <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
-                  {book.price}
-                </td>
-
-                <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
-                  {book.quantity}
-                </td>
-
-                <td className="px-6 py-5">
-                  <div className="flex justify-center">
-                    <button className="text-[#4f46e5] transition hover:scale-110">
-                      <EyeIcon className="h-4 w-4" />
-                    </button>
-                  </div>
+            {loading ? (
+              <tr>
+                <td
+                  colSpan="7"
+                  className="py-10 text-center text-slate-500"
+                >
+                  Loading books...
                 </td>
               </tr>
-            ))}
+            ) : books.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="7"
+                  className="py-10 text-center text-slate-500"
+                >
+                  No books found
+                </td>
+              </tr>
+            ) : (
+              books.map((book) => (
+                <tr
+                  key={book._id}
+                  className="border-t border-slate-200 bg-white"
+                >
+                  <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
+                    {book._id}
+                  </td>
+
+                  <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
+                    {book.name}
+                  </td>
+
+                  <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
+                    {book.author}
+                  </td>
+
+                  <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
+                    {book.ISBN}
+                  </td>
+
+                  <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
+                    {book.price}
+                  </td>
+
+                  <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
+                    {book.quantity}
+                  </td>
+
+                  <td className="px-6 py-5">
+                    <div className="flex justify-center">
+                      <button className="text-[#4f46e5] transition hover:scale-110">
+                        <EyeIcon className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
