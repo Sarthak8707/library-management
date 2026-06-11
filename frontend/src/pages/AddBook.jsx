@@ -1,9 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
+import "../App.css";
 
-function SparklesIcon({ className = "" }) {
+function SparklesIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className={className}>
+    <svg viewBox="0 0 24 24" fill="none" className="sparkles-icon">
       <path
         d="M12 3.8l1.6 4.6 4.6 1.6-4.6 1.6-1.6 4.6-1.6-4.6-4.6-1.6 4.6-1.6 1.6-4.6Z"
         fill="currentColor"
@@ -18,20 +19,17 @@ function Input({
   onChange,
   name,
   type = "text",
-  className = "",
 }) {
   return (
-    <label className={`block ${className}`}>
-      <span className="mb-2 block text-[13px] font-semibold text-slate-700">
-        {label}
-      </span>
+    <label className="book-input-wrapper">
+      <span className="book-label">{label}</span>
 
       <input
         type={type}
         name={name}
         value={value}
         onChange={onChange}
-        className="h-9 w-full rounded-lg border border-transparent bg-[#f4f4f6] px-3 text-[13px] outline-none"
+        className="book-input"
       />
     </label>
   );
@@ -79,9 +77,7 @@ export default function AddBook() {
         quantity: "",
         description: "",
       });
-    } catch (error) {
-      console.error(error);
-
+    } catch {
       alert("Failed to add book");
     } finally {
       setLoading(false);
@@ -89,15 +85,13 @@ export default function AddBook() {
   }
 
   return (
-    <section className="rounded-[12px] bg-white px-5 pb-6 pt-4 shadow-[0_10px_30px_rgba(16,24,40,0.04)]">
-      <h1 className="text-[29px] font-semibold tracking-[-0.04em] text-slate-700">
-        Add Book
-      </h1>
+    <section className="add-book-page">
+      <h1 className="page-title">Add Book</h1>
 
-      <div className="mt-4 h-px w-full bg-slate-200" />
+      <div className="page-divider"></div>
 
-      <div className="mt-6 max-w-[770px] rounded-[10px] border border-slate-200 bg-white px-5 py-5 shadow-[0_8px_28px_rgba(16,24,40,0.04)]">
-        <div className="grid grid-cols-2 gap-x-7 gap-y-5">
+      <div className="book-form-card">
+        <div className="book-grid">
           <Input
             label="Book Name"
             name="name"
@@ -135,45 +129,46 @@ export default function AddBook() {
             onChange={handleChange}
           />
 
-          <div />
+          <div></div>
         </div>
 
-        <div className="mt-5">
-          <div className="mb-2.5 text-[13px] font-semibold text-slate-700">
+        <div className="description-section">
+          <div className="book-label">
             About the book (short description)
           </div>
 
-          <div className="relative rounded-[8px] bg-[#f4f4f6] px-4 pb-4 pt-8">
+          <div className="description-box">
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
               placeholder="Generate with AI..."
-              className="min-h-[86px] w-full resize-none bg-transparent text-[13px] outline-none"
+              className="description-textarea"
             />
 
+            
             <button
               type="button"
-              className="absolute bottom-3 right-4 inline-flex items-center gap-1.5 rounded-[4px] bg-[#4f46e5] px-3 py-1.5 text-[10px] font-medium text-white"
+              className="ai-button"
             >
-              <SparklesIcon className="h-3 w-3" />
+              <SparklesIcon />
               Generate with AI
             </button>
           </div>
         </div>
 
-        <div className="mt-8 flex items-center gap-2">
+        <div className="book-buttons">
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="h-9 w-[126px] rounded-[6px] bg-[#16a34a] text-[13px] font-medium text-white"
+            className="submit-button"
           >
             {loading ? "Saving..." : "Submit"}
           </button>
 
           <button
             type="button"
-            className="h-9 w-[126px] rounded-[6px] bg-[#3b82f6] text-[13px] font-medium text-white"
+            className="chat-button"
           >
             Chat with AI
           </button>

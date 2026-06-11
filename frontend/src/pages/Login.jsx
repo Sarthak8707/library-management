@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import "../App.css";
 import loginImage from "../assets/login-library.jpg";
 
 export default function Login() {
@@ -43,59 +44,51 @@ export default function Login() {
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-white">
-      <div className="flex h-full">
-        {/* Left Side */}
+    <div className="auth-page">
+      <div className="auth-container">
+        <div className="auth-left">
+          <div className="auth-content">
+            <h1 className="auth-title">Login</h1>
 
-        <div className="flex w-[40%] items-center justify-center bg-[#fafafa] px-10">
-          <div className="w-full max-w-[430px]">
-            <h1 className="text-[42px] font-semibold text-slate-700">
-              Login
-            </h1>
-
-            <p className="mt-2 text-[14px] text-slate-500">
+            <p className="auth-subtitle">
               Enter your details to login into the system.
             </p>
 
-            <div className="mt-12">
-              <label className="block">
-                <span className="mb-3 block text-[14px] font-medium text-slate-800">
-                  Email / Username
-                </span>
+            <div className="auth-form">
+              <label className="auth-label">
+                <span>Email / Username</span>
 
                 <input
                   type="text"
                   placeholder="Enter your email/username"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-[52px] w-full rounded-lg border border-slate-300 px-4 text-[14px] outline-none focus:border-[#4f46e5]"
+                  className="auth-input"
                 />
               </label>
 
-              <label className="mt-7 block">
-                <span className="mb-3 block text-[14px] font-medium text-slate-800">
-                  Password
-                </span>
+              <label className="auth-label">
+                <span>Password</span>
 
                 <input
                   type="password"
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="h-[52px] w-full rounded-lg border border-slate-300 px-4 text-[14px] outline-none focus:border-[#4f46e5]"
+                  className="auth-input"
                 />
               </label>
 
               {errorMessage && (
-                <p className="mt-3 text-sm text-red-600">
+                <p className="auth-error">
                   {errorMessage}
                 </p>
               )}
 
-              <div className="mt-4 flex justify-end">
+              <div className="auth-link-row">
                 <button
                   type="button"
-                  className="text-[14px] font-medium text-[#2563eb]"
+                  className="auth-link-button"
                 >
                   Forgot Password?
                 </button>
@@ -104,7 +97,7 @@ export default function Login() {
               <button
                 onClick={handleLogin}
                 disabled={loading}
-                className="mt-12 h-[52px] w-full rounded-lg bg-[#4f46e5] text-[14px] font-medium text-white transition hover:bg-[#4338ca] disabled:opacity-70"
+                className="auth-button"
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
@@ -112,13 +105,11 @@ export default function Login() {
           </div>
         </div>
 
-        {/* Right Side */}
-
-        <div className="h-full w-[60%]">
+        <div className="auth-right">
           <img
             src={loginImage}
             alt="Library"
-            className="h-full w-full object-cover"
+            className="auth-image"
           />
         </div>
       </div>

@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
-export const signToken = (id) => {
+export const signToken = (kuchbhi) => {
 
-    const token = jwt.sign(id, "super_secret_key");
+    const token = jwt.sign(kuchbhi, "super_secret_key");
     return token;
     
 }

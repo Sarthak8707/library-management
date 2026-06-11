@@ -1,20 +1,33 @@
 import { Outlet } from "react-router-dom";
+import { useState } from "react";
+
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 
+import "../App.css";
+
 export default function DashboardLayout() {
+  const [searchTerm, setSearchTerm] = useState("");
+
   return (
-    <div className="min-h-screen bg-[#f7f7fb] p-2">
-      <div className="flex min-h-[calc(100vh-1rem)]">
+    <div className="dashboard-page">
+      <div className="dashboard-container">
         <Sidebar />
 
-        <div className="flex-1 ml-2">
-          <Header />
+        <main className="dashboard-main">
+          <Header
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
 
-          <div className="mt-2">
-            <Outlet />
+          <div className="dashboard-content">
+            <Outlet
+              context={{
+                searchTerm,
+              }}
+            />
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { addBookService, getAllBooksService } from "../services/books.service.js"
 
 
-export const getAllBooksController = async (req, res) => {
+export const getAllBooksController = async (_, res ) => {
 
     const result = await getAllBooksService();
     res.status(200).json(result);

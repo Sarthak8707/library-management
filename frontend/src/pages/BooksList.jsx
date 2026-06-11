@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 
-function EyeIcon({ className = "" }) {
+function EyeIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="none"
-      className={className}
+      className="action-icon"
     >
       <path
         d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"
@@ -27,6 +28,8 @@ export default function BooksList() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const { searchTerm } = useOutletContext();
+
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -45,45 +48,35 @@ export default function BooksList() {
     fetchBooks();
   }, []);
 
+  const filteredBooks = books.filter((book) => {
+    const search = searchTerm.toLowerCase();
+
+    return (
+      book.name?.toLowerCase().includes(search) ||
+      book.author?.toLowerCase().includes(search) ||
+      String(book.ISBN)
+        .toLowerCase()
+        .includes(search)
+    );
+  });
+
   return (
-    <section className="rounded-[12px] bg-white px-5 pb-6 pt-4 shadow-[0_10px_30px_rgba(16,24,40,0.04)]">
-      <h1 className="text-[29px] font-semibold tracking-[-0.04em] text-slate-700">
-        Books
-      </h1>
+    <section className="books-page">
+      <h1 className="books-title">Books</h1>
 
-      <div className="mt-4 h-px w-full bg-slate-200" />
+      <div className="books-divider"></div>
 
-      <div className="mt-6 overflow-hidden rounded-[8px] border border-slate-200">
-        <table className="w-full border-collapse">
+      <div className="books-table-wrapper">
+        <table className="books-table">
           <thead>
-            <tr className="bg-[#4f46e5] text-white">
-              <th className="border-r border-white/25 px-6 py-3 text-center text-[13px] font-medium">
-                Book ID
-              </th>
-
-              <th className="border-r border-white/25 px-6 py-3 text-center text-[13px] font-medium">
-                Book Name
-              </th>
-
-              <th className="border-r border-white/25 px-6 py-3 text-center text-[13px] font-medium">
-                Author
-              </th>
-
-              <th className="border-r border-white/25 px-6 py-3 text-center text-[13px] font-medium">
-                ISBN
-              </th>
-
-              <th className="border-r border-white/25 px-6 py-3 text-center text-[13px] font-medium">
-                Price (₹)
-              </th>
-
-              <th className="border-r border-white/25 px-6 py-3 text-center text-[13px] font-medium">
-                Quantity
-              </th>
-
-              <th className="px-6 py-3 text-center text-[13px] font-medium">
-                Actions
-              </th>
+            <tr>
+              <th>Book ID</th>
+              <th>Book Name</th>
+              <th>Author</th>
+              <th>ISBN</th>
+              <th>Price (₹)</th>
+              <th>Quantity</th>
+              <th>Actions</th>
             </tr>
           </thead>
 
@@ -92,56 +85,39 @@ export default function BooksList() {
               <tr>
                 <td
                   colSpan="7"
-                  className="py-10 text-center text-slate-500"
+                  className="table-message"
                 >
                   Loading books...
                 </td>
               </tr>
-            ) : books.length === 0 ? (
+            ) : filteredBooks.length === 0 ? (
               <tr>
                 <td
                   colSpan="7"
-                  className="py-10 text-center text-slate-500"
+                  className="table-message"
                 >
                   No books found
                 </td>
               </tr>
             ) : (
-              books.map((book) => (
-                <tr
-                  key={book._id}
-                  className="border-t border-slate-200 bg-white"
-                >
-                  <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
-                    {book._id}
-                  </td>
+              filteredBooks.map((book) => (
+                <tr key={book._id}>
+                  <td>{book._id}</td>
 
-                  <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
-                    {book.name}
-                  </td>
+                  <td>{book.name}</td>
 
-                  <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
-                    {book.author}
-                  </td>
+                  <td>{book.author}</td>
 
-                  <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
-                    {book.ISBN}
-                  </td>
+                  <td>{book.ISBN}</td>
 
-                  <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
-                    {book.price}
-                  </td>
+                  <td>{book.price}</td>
 
-                  <td className="border-r border-slate-200 px-6 py-5 text-center text-[14px] text-slate-700">
-                    {book.quantity}
-                  </td>
+                  <td>{book.quantity}</td>
 
-                  <td className="px-6 py-5">
-                    <div className="flex justify-center">
-                      <button className="text-[#4f46e5] transition hover:scale-110">
-                        <EyeIcon className="h-4 w-4" />
-                      </button>
-                    </div>
+                  <td>
+                    <button className="view-btn">
+                      <EyeIcon />
+                    </button>
                   </td>
                 </tr>
               ))
