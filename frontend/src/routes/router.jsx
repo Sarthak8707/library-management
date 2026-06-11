@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -8,6 +8,11 @@ import BooksList from "../pages/BooksList";
 import DashboardLayout from "../layouts/DashboardLayout";
 
 export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Navigate to="/login" replace />
+  },
+
   {
     path: "/login",
     element: <Login />
