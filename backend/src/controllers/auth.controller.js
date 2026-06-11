@@ -1,4 +1,4 @@
-import { loginService, registerService } from "../services/auth.service";
+import { loginService, registerService } from "../services/auth.service.js";
 
 export const registerController = async (req, res) => {
 
@@ -15,6 +15,6 @@ export const loginController = async (req, res) => {
     const {email, password} = req.body;
 
     const result = await loginService({email, password});
-    res.json({LoginSuccessful: result});
+    res.status(200).json({LoginSuccessful: result});
 
 }
